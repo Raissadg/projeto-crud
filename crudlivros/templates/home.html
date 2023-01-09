@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <div class="container">
+      <div class="row">
+          <div class="col md-12">
+              <div class="container text-white bg-secondary p-4 roudend my-4">
+                  <h3>Gerenciar Livros <a href="{{ url_for('adicionar_livro') }}"><button type="button" class="btn btn-success float-end">Adicionar Livro</button></a> </h3>
+
+                  <table class="table table-dark">
+                      <thead>
+                        <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Nome</th>
+                          <th scope="col">Autor</th>
+                          <th scope="col">Descrição</th>
+                          <th scope="col">Ação</th>
+                        </tr>
+                      </thead>
+                      {% if current_user.is_authenticated %}
+                        {% if current_user.contar_livros() > 0 %}
+                          {% for livro in livros %}
+                            <tbody>
+                              <tr>
+                                <th scope="row">{{ livro.id }}</th>
+                                <td>{{ livro.nome }}</td>
+                                <td>{{ livro.autor }}</td>
+                                <td>{{ livro.descricao}}</td>
+                                <td>
+                                    <a href="{{ url_for('editar', livro_id=livro.id) }}"><button type="button" class="btn btn-warning">Editar</button></a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{ livro.id }}">Excluir</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          {% endfor %}
+                        {% else %}
+                          <tbody>
+                            <tr>
+                              <th scope="row"></th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                  <button type="button" class="btn btn-warning">Editar</button>
+                                  <button type="button" class="btn btn-danger">Excluir</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        {% endif %}
+                      {% endif %}
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  {% for livro in livros %}
+  <div class="modal fade" id="exampleModal{{ livro.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Excluir Livro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Deseja realmente exluir o livro? (A ação não poderá ser desfeita)
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <form method="POST" action="{{ url_for('excluir_livro', livro_id=livro.id) }}">
+            <button type="submit" class="btn btn-danger">Excluir Livro</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+{% endblock %}

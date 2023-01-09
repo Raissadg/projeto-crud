@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form_login.csrf_token }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Fazer Login</legend>
+                <div class="form-group">
+                    {{ form_login.email.label(class="form-control-label") }}
+                    {% if form_login.email.errors %}
+                        {{ form_login.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form_login.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form_login.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form_login.senha.label(class="form-control-label") }}
+                    {% if form_login.senha.errors %}
+                        {{ form_login.senha(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form_login.senha.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form_login.senha(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form_login.lembrar(class="form-check-input") }}
+                    {{ form_login.lembrar.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form_login.botao_submit_login(class="btn btn-outline-info mt-2") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
